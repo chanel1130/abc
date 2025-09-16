@@ -37,6 +37,7 @@ function draw() {
   // circle(0, -100, 5)
   // pop();
 
+  //map gamma - posX, beta - poxY
   posX = map(gamma, -60, 60, 0, windowWidth);
   posY = map(beta, -30, 80, 0, windowHeight);
   t = map(posX, 0, windowWidth, 0, 1);
