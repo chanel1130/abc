@@ -1,0 +1,172 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+.main-wrapper {
+    width: 100%;
+    height: 100dvh;
+    /* 100% of what's in view */
+    background-color: rgb(12, 12, 12);
+    display: flex;
+    flex-direction: column;
+    /* align-content: stretch; */
+    justify-content: space-between;
+    /* padding: 10px 5px; */
+    /* padding-bottom: 15px; */
+    box-sizing: border-box;
+}
+
+#chatHeader {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    background-color: #000000;
+    color: aquamarine;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding-top: env(safe-area-inset-top);
+    z-index: 10;
+}
+
+#threadWrapper {
+    /* background-color: rgb(22, 23, 28);; */
+    flex-grow: 1;
+    margin: 15px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow-y: auto;
+}
+
+#threadWrapper ul {
+    list-style: none;
+    /* margin:0; */
+    padding: 10px;
+    /* outline: 1px black dotted; */
+    overflow: scroll;
+    word-wrap: break-word;
+    word-break: break-word;
+
+
+}
+
+#threadWrapper li {
+    /* background-color: blanchedalmond; */
+    margin-top: 5px;
+    padding: 5px 2px;
+    /* display: inline-block; */
+}
+
+.who {
+    display: block;
+    margin-bottom: 6px;
+    font-style: italic;
+    font-size: 14px;
+    color: rgb(169, 184, 197);
+}
+
+.words {
+    display: inline-block;
+    white-space: normal;
+    padding-left: 13px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    /* border-radius: 15px; */
+    background-color: rgba(127, 255, 212);
+    color: rgb(37, 37, 37);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+
+}
+
+
+#threadWrapper li:nth-child(even) .words {
+    /* background-color: aqua; */
+    background-color: rgb(176, 212, 212);
+}
+
+#threadWrapper li:nth-child(odd) .words {
+    /* background-color: aquamarine; */
+    background-color: rgb(160, 224, 202);
+}
+
+.words:nth-child(even) {
+    background-color: aqua;
+}
+
+#chatForm {
+    display: flex;
+    justify-content: space-between;
+}
+
+#chatForm input {
+    flex-grow: 1;
+    height: 35px;
+    margin-bottom: 35px;
+    margin-left: 15px;
+    background-color: rgb(22, 23, 28);
+    border-radius: 50px;
+    padding-left: 20px;
+    color: whitesmoke;
+
+}
+
+
+#nameWrapper input {
+    /* width: 100%; */
+    height: 20px;
+    width: 80px;
+    margin-bottom: 8px;
+    margin-left: 15px;
+    /* box-sizing: border-box; */
+    background-color: rgb(6, 6, 11);
+    border-radius: 50px;
+    padding-left: 20px;
+    color: whitesmoke;
+}
+
+#nameWrapper p {
+    display: block;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+
+.word {
+    display: inline;
+    margin-right: 0.3em;
+    transition: font-size 0.1s linear;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+
+}
+
+
+.word.active {
+    transform: scale(1.5);
+    background-color: rgba(255, 255, 0, 0.2);
+}
+
+#button {
+    margin-right: 15px;
+    margin-bottom: 35px;
+    border-radius: 50px;
+    margin-left: 10px;
+    border-style: none;
+    /* background-color: rgb(47, 255, 0); */
+    background-color: aquamarine;
+    color: rgb(21, 21, 21);
+    font-style: italic;
+    font-family: serif;
+    font-size: 14px;
+}
