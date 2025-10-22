@@ -6,13 +6,13 @@ let nameInput = document.querySelector("#nameWrapper input");
 // initialize socket connection
 //const socket = io();
 const CUT = 1;
-const parts =   
+const parts = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean);
 console.log(parts)
 const base  = parts.length ? '/' + parts.slice(0, -CUT).join('/') : ''; // on SERVER...
 // const base  = parts.length ? parts.slice(0, -CUT).join('/') : ''; // on LOCAL...
 console.log(base);
 
-const socket = io({ path: parts.join("/") + '/socket.io' });
+const socket = io({ path: base + '/socket.io' });
 
 
 // LISTEN FOR NEWLY TYPED MESSAGES, 
