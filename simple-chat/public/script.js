@@ -5,7 +5,7 @@ console.log(msgInput);
 let nameInput = document.querySelector("#nameWrapper input");
 // initialize socket connection
 //const socket = io();
-const CUT = 2;
+const CUT = 1;
 const parts = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean);
 const base  = parts.length ? '/' + parts.slice(0, -CUT).join('/') : ''; // on SERVER...
 // const base  = parts.length ? parts.slice(0, -CUT).join('/') : ''; // on LOCAL...
