@@ -12,7 +12,7 @@ const base  = parts.length ? '/' + parts.slice(0, -CUT).join('/') : ''; // on SE
 // const base  = parts.length ? parts.slice(0, -CUT).join('/') : ''; // on LOCAL...
 console.log(base);
 
-const socket = io({ path: base + '/socket.io' });
+const socket = io({ path: parts.join("/") + '/socket.io' });
 
 
 // LISTEN FOR NEWLY TYPED MESSAGES, 
