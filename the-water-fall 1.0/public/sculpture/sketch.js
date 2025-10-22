@@ -4,12 +4,20 @@ let spawnInterval = null;
 let number;
 let yToGy = {};
 
-const audio1 = new Audio('assets/audio/bell1.mp3');
-const audio2 = new Audio('assets/audio/bell2.mp3');
-const audio3 = new Audio('assets/audio/bell3.mp3');
-const audio4 = new Audio('assets/audio/bell4.mp3');
-const audio5 = new Audio('assets/audio/bell5.mp3');
-const audio6 = new Audio('assets/audio/bell6.mp3');
+
+let audio1;
+let audio2;
+let audio3;
+let audio4;
+let audio5;
+let audio6;
+
+// const audio1 = new Audio('assets/audio/bell1.mp3');
+// const audio2 = new Audio('assets/audio/bell2.mp3');
+// const audio3 = new Audio('assets/audio/bell3.mp3');
+// const audio4 = new Audio('assets/audio/bell4.mp3');
+// const audio5 = new Audio('assets/audio/bell5.mp3');
+// const audio6 = new Audio('assets/audio/bell6.mp3');
 
 
 let socket;
@@ -26,7 +34,8 @@ button1.addEventListener("click", function () {
   button2.remove();
   button3.remove();
   button4.remove();
-  socket.emit("my-number", { number })
+  socket.emit("my-number", { number });
+   userStartAudio();
 })
 
 button2.addEventListener("click", function () {
@@ -35,7 +44,8 @@ button2.addEventListener("click", function () {
   button2.remove();
   button3.remove();
   button4.remove();
-  socket.emit("my-number", { number })
+  socket.emit("my-number", { number });
+   userStartAudio();
 })
 
 button3.addEventListener("click", function () {
@@ -44,7 +54,56 @@ button3.addEventListener("click", function () {
   button2.remove();
   button3.remove();
   button4.remove();
-  socket.emit("my-number", { number })
+  socket.emit("my-number", { number });
+   userStartAudio();
+  // loadAudios();
+
+
+  // audio1 = document.createElement("audio");
+  // audio1.innerHTML = `
+  //       <source src="assets/audio/bell1.mp3" type="audio/mpeg">
+  //       Your browser does not support the audio element.
+  //   `
+
+  // audio2 = document.createElement("audio");
+  // audio2.innerHTML = `
+  //       <source src="assets/audio/bell2.mp3" type="audio/mpeg">
+  //       Your browser does not support the audio element.
+  //   `
+
+  // audio3 = document.createElement("audio");
+  // audio3.innerHTML = `
+  //       <source src="assets/audio/bell3.mp3" type="audio/mpeg">
+  //       Your browser does not support the audio element.
+  //   `
+
+  // audio4 = document.createElement("audio");
+  // audio4.innerHTML = `
+  //       <source src="assets/audio/bell4.mp3" type="audio/mpeg">
+  //       Your browser does not support the audio element.
+  //   `
+
+  // audio5 = document.createElement("audio");
+  // audio5.innerHTML = `
+  //       <source src="assets/audio/bell5.mp3" type="audio/mpeg">
+  //       Your browser does not support the audio element.
+  //   `
+
+  // audio6 = document.createElement("audio");
+  // audio6.innerHTML = `
+  //       <source src="assets/audio/bell6.mp3" type="audio/mpeg">
+  // Your browser does not support the audio element.
+  // `
+
+  // audio1 = new Audio('assets/audio/bell1.mp3');
+  // audio2 = new Audio('assets/audio/bell2.mp3');
+  // audio3 = new Audio('assets/audio/bell3.mp3');
+  // audio4 = new Audio('assets/audio/bell4.mp3');
+  // audio5 = new Audio('assets/audio/bell5.mp3');
+  // audio6 = new Audio('assets/audio/bell6.mp3');
+
+
+
 })
 
 button4.addEventListener("click", function () {
@@ -53,8 +112,25 @@ button4.addEventListener("click", function () {
   button2.remove();
   button3.remove();
   button4.remove();
-  socket.emit("my-number", { number })
+  socket.emit("my-number", { number });
+   userStartAudio();
+
+
+
 })
+
+
+
+
+function preload() {
+  audio1 = loadSound("assets/audio/bell1.mp3");
+  audio2 = loadSound("assets/audio/bell2.mp3");
+  audio3 = loadSound("assets/audio/bell3.mp3");
+  audio4 = loadSound("assets/audio/bell4.mp3");
+  audio5 = loadSound("assets/audio/bell5.mp3");
+  audio6 = loadSound("assets/audio/bell6.mp3");
+}
+
 
 function setup() {
   let canvas = createCanvas(windowWidth, windowHeight);
@@ -77,10 +153,16 @@ function setup() {
 
 }
 
+
 function playAudio(audio) {
-  const clone = audio.cloneNode();
-  clone.currentTime = 0;
-  clone.play();
+  // const clone = audio.cloneNode();
+  // clone.currentTime = 0;
+  // clone.play();
+
+  if (audio && audio.isLoaded()) {
+    audio.play();
+  }
+
 }
 
 function draw() {
@@ -110,45 +192,37 @@ function draw() {
       b.hit = false;
     }
 
-    // let speed = abs(b.vx) + abs(b.gx);
-    // let freq = 1000 + random(-80, 80) + speed * 800;
-    // let amp = map(speed, 0, 3, 0.01, 0.04);
-    // if (b.noise) {
-    //   b.filter.freq(freq);
-    //   b.noise.amp(amp, 0.001);
-    // }
 
     //stop at the edge of the screen
     if (b.x + b.size / 2 <= 0 && !b.hit) {
       b.hit = true;
-      // b.vx = 0;
-      // b.gx = 0;
 
-      // if (b.noise) {
-      //   b.noise.amp(0, 0.3);
-      //   setTimeout(() => b.noise.stop(), 300);
-      //   b.noise = null;
-      // }
 
       if (number === "4") {
         if (b.y >= 0 && b.y <= windowHeight / 6) {
-          // audio1.play();
-          playAudio(audio1);
+          audio1.play();
+          // playAudio(audio1);
+          console.log("play1")
         } else if (b.y > windowHeight / 6 && b.y <= windowHeight / 3) {
-          // audio2.play();
-          playAudio(audio2);
+          audio2.play();
+          // playAudio(audio2);
+          console.log("play2")
         } else if (b.y > windowHeight / 3 && b.y <= windowHeight / 2) {
-          // audio3.play();
-          playAudio(audio3);
+          audio3.play();
+          // playAudio(audio3);
+          console.log("play3")
         } else if (b.y > windowHeight / 2 && b.y <= windowHeight * 2 / 3) {
-          // audio4.play();
-          playAudio(audio4);
+          audio4.play();
+          // playAudio(audio4);
+          console.log("play4")
         } else if (b.y > windowHeight * 2 / 3 && b.y <= windowHeight * 5 / 6) {
-          // audio5.play();
-          playAudio(audio5);
+          audio5.play();
+          // playAudio(audio5);
+          console.log("play5")
         } else {
-          // audio6.play();
-          playAudio(audio6);
+          audio6.play();
+          // playAudio(audio6);
+          console.log("play6")
         }
       }
 
@@ -260,6 +334,9 @@ socket.on("ball-bounce", (data) => {
 
 let noise, filter, reverb;
 function touchStarted(event) {
+
+
+
   if (!spawnInterval) {
     spawnInterval = setInterval(() => {
       //touches: a built-in global variable
@@ -295,7 +372,7 @@ function touchStarted(event) {
   userStartAudio();
   //create the sound
   noise.start();
-  noise.amp(0.01, 2)
+  noise.amp(0.01, 2);
 }
 
 function touchMoved() {
