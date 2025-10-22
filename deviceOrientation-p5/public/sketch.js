@@ -12,6 +12,7 @@ let targetSize = 20;
 
 function setup() {
   c1 = color(0, 150, 255);
+  // c1 = color(255, 150, 255);
   c2 = color(0, 255, 150);
   let canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("p5-canvas-container");
@@ -25,17 +26,6 @@ function draw() {
   if (beta < -150 || beta > 150) {
     background(0);
   }
-  // push();
-  // translate(width / 2, height / 2);
-  // rotate(radians(beta));
-
-  // // black rectangle 
-  // fill(200); 
-  // rect(-100, -100, 200, 200);
-  // // red circle 
-  // fill(255, 0, 0); 
-  // circle(0, -100, 5)
-  // pop();
 
   //map gamma - posX, beta - poxY
   posX = map(gamma, -60, 60, 0, windowWidth);
@@ -53,9 +43,13 @@ function draw() {
   noStroke();
   drawMirroredCircles(posX, posY, circleSize);
 
-  // text("alpha: " + round(alpha), 10, 30);
-  // text("beta: " + round(beta), 10, 40);
-  // text("gamma: " + round(gamma), 10, 50);
+  noStroke();
+  fill(0, 150);
+  rect(0, 0, 150, 60);
+  fill(255,255,255);
+  text("alpha: " + round(alpha), 10, 30);
+  text("beta: " + round(beta), 10, 40);
+  text("gamma: " + round(gamma), 10, 50);
 }
 
 function drawMirroredCircles(x, y, s) {
@@ -67,6 +61,7 @@ function drawMirroredCircles(x, y, s) {
   let dy = y - cy;
 
 
+  // circle(x,y,s);
   circle(cx + dx, cy + dy, s);   // original
   circle(cx - dx, cy + dy, s);   // vertical 
   circle(cx + dx, cy - dy, s);   // horizontal

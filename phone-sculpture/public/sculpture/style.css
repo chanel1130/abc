@@ -1,0 +1,17 @@
+body{
+    margin: 0;
+    background: #000;
+}
+
+canvas {
+  -webkit-user-select: none; 
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+#p5-canvas-container {
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+

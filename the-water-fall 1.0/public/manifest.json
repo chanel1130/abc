@@ -1,0 +1,12 @@
+{
+  "name": "gyroscope",
+  "icons": [
+    {
+      "src": "assets/app_icon.jpg",
+      "type": "image/jpg",
+      "sizes": "512x512"
+    }
+  ],
+  "orientation": "Natural",
+  "display": "standalone"
+}
