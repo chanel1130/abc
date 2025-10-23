@@ -1,9 +1,9 @@
 {
-  "name": "gyroscope",
+  "name": "the water fall",
   "icons": [
     {
       "src": "assets/app_icon.png",
-      "type": "image/jpg",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],
