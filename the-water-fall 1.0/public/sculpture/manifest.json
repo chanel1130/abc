@@ -2,7 +2,7 @@
   "name": "gyroscope",
   "icons": [
     {
-      "src": "assets/app_icon.jpg",
+      "src": "assets/app_icon.png",
       "type": "image/jpg",
       "sizes": "512x512"
     }
