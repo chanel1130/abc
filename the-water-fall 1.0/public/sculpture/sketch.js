@@ -20,8 +20,21 @@ let audio6;
 // const audio6 = new Audio('assets/audio/bell6.mp3');
 
 
-let socket;
-socket = io();
+// let socket;
+// socket = io();
+const CUT = 1;
+const parts = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean);
+console.log(parts)
+
+let importantParts = []
+for(p of parts){
+    importantParts.push(p);
+    if(p.startsWith("port-")){
+        break
+    }
+}
+
+const socket = io({ path: "/"+importantParts.join("/") + '/socket.io' });
 
 let button1 = document.querySelector("#button1");
 let button2 = document.querySelector("#button2");
