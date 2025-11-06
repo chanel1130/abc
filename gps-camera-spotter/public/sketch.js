@@ -7,7 +7,7 @@ let mapInit = false; // we only do map stuff once mapInit is true (see in draw)
 let me; // point object showing our own location
 let others = {};
 
-if(location.hostname.toLowerCase().startsWith('browsercircus')){
+if(location.hostname.toLowerCase().startsWith('browsercircus') || location.hostname.toLowerCase().startsWith('www')){
   socket = io({path: "/chanel/port-4200/socket.io"});  // yields '/leon/port-4100/socket.io' or '/socket.io'
 }else{
   socket = io(); 
