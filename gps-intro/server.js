@@ -4,7 +4,7 @@ const https = require("https");
 // to read certificates from the filesystem (fs)
 const fs = require("fs");
 const app = express(); // the server "app", the server behaviour
-const portHTTPS = 3010; // YOUR port
+const portHTTPS = 4200; // YOUR port
 
 // returning to the client anything that is
 // inside the public folder
@@ -51,9 +51,14 @@ io.on('connection', (socket) => {
             lng: data.lng,
             socketID: socket.id
         }
-        io.emit("camera-from-server", cameraInfo);
-        console.log(cameraInfo);
+        socket.broadcast.emit("camera-from-server", cameraInfo);
+        console.log(JSON.stringify(cameraInfo)+",");
     })
+
+    socket.on("deletePrevious", function (data) {
+        console.log("DELETE LAST POINT FROM", socket.id)
+    })
+
 
     // DISCONNECT
     socket.on("disconnect", function () {

@@ -6,10 +6,43 @@ let currentLatitude = 0; // global variables will be updated as we get GPS data
 let mapInit = false; // we only do map stuff once mapInit is true (see in draw)
 let me; // point object showing our own location
 let others = {};
-let socket = io();
+
+if(location.hostname.toLowerCase().startsWith('browsercircus')){
+  socket = io({path: "/chanel/port-4200/socket.io"});  // yields '/leon/port-4100/socket.io' or '/socket.io'
+}else{
+  socket = io(); 
+}
 
 let cameras = [];
 
+let deleteButton = document.getElementById("deleteLast");
+
+
+let unlockButton = document.getElementById("unlock");
+let lastButtonClick = -5000;
+let timeToMarkCamera = 5000;
+
+unlockButton.addEventListener("click", function(){
+  lastButtonClick = millis();
+})
+
+let lastLat = 0;
+let lastLng = 0;
+deleteButton.addEventListener("click", function(){
+  // lastButtonClick = millis();
+
+
+  socket.emit("deletePrevious");
+  deleteButton.style.display = "none";
+  for(let i = cameras.length-1; i >= 0 ; i--){
+    if(cameras[i].lat == lastLat && cameras[i].lng == lastLng){
+      console.log(cameras)
+      cameras.splice(i, 1);
+      console.log(cameras)
+    } 
+
+  }
+})
 
 
 // options for map
@@ -36,6 +69,15 @@ function draw() {
   clear();
 
 
+  if(millis()-lastButtonClick<timeToMarkCamera){
+    let timeLeft = floor(((5000-(millis()-lastButtonClick))/1000));
+    // text(timeLeft, 50, 300)
+    unlockButton.innerHTML = "mark camera (" + timeLeft + ")"
+    unlockButton.style.color = "red";
+  }else{
+     unlockButton.innerHTML = "UNLOCK";
+     unlockButton.style.color = "green";
+  }
   // Initialize full screen map
   if (!mapInit && GPS_GRANTED && currentLongitude != 0) {
     console.log("starting map");
@@ -46,6 +88,8 @@ function draw() {
     myMap = mappa.tileMap(mappa_options);
     myMap.overlay(canvas);
     myMap.onChange(updateMapContent);
+    unlockButton.style.display = "block";
+    deleteButton.style.display = "block";
     mapInit = true
   }
 
@@ -98,17 +142,30 @@ socket.on("camera-from-server", (data) => {
 // P5 touch events: https://p5js.org/reference/#Touch
 function touchStarted() {
   if (mapInit) {
-    //from screen pixel to location
-    let pos = myMap.pixelToLatLng(touches[0].x, touches[0].y);
-    console.log("TOUCHED", pos);
-    cameras.push({
-      lat: pos.lat,
-      lng: pos.lng
-    })
-    socket.emit("camera-from-client", {
-      lat: pos.lat,
-      lng: pos.lng
-    })
+
+
+
+    if(millis()-lastButtonClick<timeToMarkCamera){
+      //from screen pixel to location
+      let pos = myMap.pixelToLatLng(touches[0].x, touches[0].y);
+      console.log("TOUCHED", pos);
+      cameras.push({
+        lat: pos.lat,
+        lng: pos.lng
+      })
+      lastLat = pos.lat;
+      lastLng = pos.lng;
+      socket.emit("camera-from-client", {
+        lat: pos.lat,
+        lng: pos.lng
+      })
+      console.log(cameras)
+      lastButtonClick = 0;
+      deleteButton.style.display = "block";
+
+    }
+    
+    
 
 
   } else {
@@ -143,8 +200,8 @@ function handleNewPosition(pos) {
     lng: currentLongitude
   }
   socket.emit("location-from-client", { locForSer });
+ 
 }
-
 // socket.on("location-from-server", function (data) {
 //   console.log("other location", data);
 
