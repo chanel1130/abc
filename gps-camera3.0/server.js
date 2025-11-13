@@ -5,7 +5,7 @@ const https = require("https");
 const fs = require("fs");
 const app = express(); // the server "app", the server behaviour
 const portHTTPS = 4200
-; // YOUR port
+    ; // YOUR port
 
 // returning to the client anything that is
 // inside the public folder
@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
     currentlyConntected.push(socket.id);
 
     socket.on("location-from-client", function (data) {
-        console.log("got new location", data);
+        // console.log("got new location", data);
         //share location with everyone except the sender
         let locationInfo = {
             lat: data.locForSer.lat,
@@ -43,19 +43,21 @@ io.on('connection', (socket) => {
             id: socket.id
         }
         socket.broadcast.emit("location-from-server", locationInfo);
-     
+
     })
 
     socket.on("traces-from-client", (data) => {
 
-    socket.broadcast.emit("traces-from-server", data);
-  });
-
-     let users = {};
-    socket.on("new-user", function(col) {
-    users[socket.id] = { color: col };
-    io.emit("users-update", users);
+        socket.broadcast.emit("traces-from-server", data);
     });
+
+    // let users = {};
+    // socket.on("new-user", function () {
+    //     // users[socket.id] = { 
+    //     //     color: col 
+    //     // };
+    //     io.emit("users-update", users);
+    // });
 
     // socket.on("camera-from-client", function (data) {
     //     let cameraInfo = {
