@@ -1,0 +1,224 @@
+html,
+body {
+  background: #000000;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  /* prevent from minimizing the browser */
+  touch-action: none;
+  font-family: "Gloria Hallelujah", cursive;
+}
+
+/* .gloria-hallelujah-regular {
+  font-family: "Gloria Hallelujah", cursive;
+  font-weight: 400;
+  font-style: normal;
+} */
+
+
+canvas {
+  display: block;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
+}
+
+.front-page-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 200px;
+}
+
+.title-text {
+  color: white;
+}
+
+.title-image {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.title-icon {
+  width: 30%;
+  /* z-index: 2; */
+}
+
+#gif-container {
+  /* position: absolute;
+  top: 40%;
+  left: 40%;
+  transform: translate(-40%, -40%); */
+  position: absolute;
+  top: 55%;
+  left: 63%;
+  transform: translate(-55%, -63%);
+  /* bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%); */
+  /* 调整中心点 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  /* z-index: 1; */
+
+}
+
+.gif {
+  width: 60%;
+}
+
+
+
+
+#p5-canvas-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#saveBtn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 200px;
+  height: 40px;
+  font-family: "Gloria Hallelujah", cursive;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ff55ff;
+  background-color: rgba(72, 76, 79, 0.408);
+  border-radius: 50px;
+  border-width: 0;
+  /* box-shadow: 0 0 20px #ffa4ff88; */
+}
+
+#clearBtn {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  width: 120px;
+  height: 40px;
+  font-family: "Gloria Hallelujah", cursive;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ff55ff;
+  background-color: rgba(72, 76, 79, 0.408);
+  border-width: 0;
+}
+
+#backBtn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 200px;
+  height: 40px;
+  font-family: "Gloria Hallelujah", cursive;
+  color: #ff55ff;
+  background-color: rgba(72, 76, 79, 0.408);
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 50px;
+  border-width: 0;
+}
+
+
+
+
+
+#toolbar {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  z-index: 1000;
+}
+
+/* #brush-buttons, */
+
+#brush-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+#color-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+
+
+#home-btn {
+  width: 10%;
+}
+
+.brush-btn {
+  width: 42px;
+  height: 42px;
+  background: none;
+  border: none;
+  border-radius: 30px;
+  /* background: white; */
+  /* border: 2px solid #ccc; */
+  cursor: pointer;
+}
+
+.brush-btn img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+
+.brush-btn.selected {
+  /* border-color: #fe1ffe; */
+  /* border-width: 2px; */
+  box-shadow: 0 0 20px #ffa4ff88;
+  transform: scale(1.15);
+}
+
+.color-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  /* cursor: pointer; */
+  margin-top: 10px;
+  /* border: 2px solid white; */
+}
+
+.color-btn.selected {
+  /* outline: 2px solid #d021d0; */
+  box-shadow: 0 0 20px #ffeaff88;
+  transform: scale(1.5);
+}
+
+
+
+.color-btn[data-color="#ff55ff"] {
+  background: #ff55ff;
+}
+
+.color-btn[data-color="#ffffff"] {
+  background: #ffffff;
+}
+
+.color-btn[data-color="#4da3ff"] {
+  background: #4da3ff;
+}

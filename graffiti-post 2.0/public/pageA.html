@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+
+  <link rel="manifest" href="manifest.json" />
+
+  <title>graffiti</title>
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+
+  <script src="lib/p5.js"></script>
+  <!-- <script src="lib/p5.sound.js"></script> -->
+
+  <!-- include socket.io library: -->
+  <!-- <script src="/socket.io/socket.io.js"></script>  -->
+  <script src="socket.io/socket.io.js"></script>
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+
+
+</head>
+
+<body>
+
+
+  <div class="main-wrapper">
+    <!-- <h1>Project Title</h1> -->
+
+    <!-- the following div will contain the p5 canvas. -->
+    <div id="p5-canvas-container">
+      <!-- p5 canvas will be appended here. -->
+
+    </div>
+    <!-- <p>Project Description</p> -->
+  </div>
+  <div id="toolbar">
+    <div id="brush-buttons">
+      <!-- <button class="brush-btn selected" data-brush="spray">Spray</button>
+      <button class="brush-btn" data-brush="marker">Marker</button>
+      <button class="brush-btn" data-brush="pen">Pen</button> -->
+      <button class="brush-btn selected" data-brush="spray">
+        <img src="lib/icon/spray.png">
+      </button>
+      <button class="brush-btn" data-brush="marker">
+        <img src="lib/icon/marker.png">
+      </button>
+      <button class="brush-btn" data-brush="pen">
+        <img src="lib/icon/pen.png">
+      </button>
+    </div>
+    <div id="color-buttons">
+      <div class="color-btn selected" data-color="#ff55ff"></div>
+      <div class="color-btn" data-color="#ffffff"></div>
+      <div class="color-btn" data-color="#4da3ff"></div>
+    </div>
+
+    <img id="home-btn" onclick="goHome()" src="lib/icon/toilet.png">
+
+  </div>
+
+  <button id="clearBtn">Clear</button>
+  <button id="saveBtn">Place on the wall</button>
+
+
+  <!-- the script tag below should always be at the bottom, right before the closing body tag -->
+  <script src="sketchA.js"></script>
+</body>
+
+</html>

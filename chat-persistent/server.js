@@ -30,7 +30,21 @@ let sockets = {};
 // userId -> socket.id
 let users = {};
 
-let messages = []
+let messages = [];
+let DATA_PATH = "chat-data.json";
+
+try {
+    //if the file exists
+  if (fs.existsSync(DATA_PATH)) {
+    const file = fs.readFileSync(DATA_PATH, 'utf8');
+    messages = JSON.parse(file);
+    console.log('Loaded chat history:', messages.length, 'messages');
+  }
+  //if the file doesn't exist yet, messages[] stays empty
+} catch (err) {
+  console.log('Could not load chat history, starting empty');
+  messages = [];
+}
 
 io.on('connection', (socket) => {
 
@@ -56,6 +70,7 @@ io.on('connection', (socket) => {
 
     socket.on("name-change", function (data) {
         // handle change of username
+        sockets[socket.id].username = data.newUsername;
     })
 
     socket.on("message-from-client", function (data) {
@@ -66,9 +81,16 @@ io.on('connection', (socket) => {
             message: data.message,
             sender: sockets[socket.id]
         }
+        //append messages to runtime message object
+        messages.push(message);
+        //save the new message array to the local JSON file
+        let stringifiedMessages = JSON.stringify(messages, null, 2);
+        //(which file to write into, which message, 'utf-8')
+        fs.writeFileSync(DATA_PATH, stringifiedMessages, 'utf-8');
 
-        messages.push(message)
+
         io.emit("message-from-server", message);
+        
     })
 
     socket.on("disconnect", function () {

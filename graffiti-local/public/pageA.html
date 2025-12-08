@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+
+  <link rel="manifest" href="manifest.json" />
+
+  <title>graffiti</title>
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+
+  <script src="lib/p5.js"></script>
+  <!-- <script src="lib/p5.sound.js"></script> -->
+
+  <!-- include socket.io library: -->
+  <!-- <script src="/socket.io/socket.io.js"></script>  -->
+  <script src="socket.io/socket.io.js"></script>
+
+
+</head>
+
+<body>
+
+
+  <div class="main-wrapper">
+    <!-- <h1>Project Title</h1> -->
+  
+    <!-- the following div will contain the p5 canvas. -->
+    <div id="p5-canvas-container">
+      <!-- p5 canvas will be appended here. -->
+
+    </div>
+    <!-- <p>Project Description</p> -->
+  </div>
+<br>
+<br>
+<br>
+<br>
+<button id="saveBtn" style="width:300px; height:80px" onclick="console.log('click')">Save & Next</button>
+
+
+  <!-- the script tag below should always be at the bottom, right before the closing body tag -->
+  <script src="sketchA.js"></script>
+</body>
+
+</html>
