@@ -136,7 +136,15 @@ function setup() {
     }
   })
 
+  socket.on("new-drawing-from-server", function(d){
+    console.log("got single new drawing", d)
+    d.img = loadImage(d.imgURL, img => {
+          d.img = img;
+          d.timestamp = d.timestamp || Date.now();
 
+    });
+    allGraffiti.push(d);
+  })
 
   //when other users are editing their graffiti, update in real time
   socket.on("othersEditingGraffiti", updated => {

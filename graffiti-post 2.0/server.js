@@ -69,7 +69,7 @@ io.on('connection', (socket) => {
   if (comesFromDisplayPage == true) {
     // socket.emit("allGraffiti", allGraffiti);
     console.log('sending', allGraffiti)
-    io.emit("allGraffiti", allGraffiti);
+    socket.emit("allGraffiti", allGraffiti);
 
   }
 
@@ -102,7 +102,7 @@ io.on('connection', (socket) => {
     // save allGraffiti to JSON
 
     // send to current clients of page 2
-    // socket.broadcast.emit("new") .... 
+    socket.broadcast.emit("new-drawing-from-server", drawing)
 
 
   })
