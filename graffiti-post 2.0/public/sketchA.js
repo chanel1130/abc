@@ -238,7 +238,7 @@ function saveDrawing() {
 
 
   gfx.elt.toBlob(blob => {
-    fetch('/upload-graffiti', {
+    fetch('upload-graffiti', {
       method: 'POST',
       headers: { 'Content-Type': 'image/png' },
       body: blob
