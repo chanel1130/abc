@@ -1,6 +1,4 @@
 // const { scale } = require("framer-motion");
-const prefix = location.pathname.replace(/\/$/, '');      
-const socket = io({ path: prefix + '/socket.io' });
 
 if (location.hostname.toLowerCase().startsWith('browsercircus') || location.hostname.toLowerCase().startsWith('www')) {
   socket = io({ path: "/chanel/port-4200/socket.io" });  // yields '/leon/port-4100/socket.io' or '/socket.io'
@@ -54,7 +52,7 @@ let allGraffiti = [];
 // }
 
 function setup() {
-  socket = io();
+  // socket = io();
 
   let canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("p5-canvas-container");

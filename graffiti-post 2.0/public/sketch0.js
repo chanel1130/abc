@@ -2,8 +2,7 @@ const startBtn = document.querySelector('.start-btn');
 const gifContainer = document.getElementById('gif-container');
 // const homeBtn = document.getElementById('home-btn');
 
-const prefix = location.pathname.replace(/\/$/, '');      
-const socket = io({ path: prefix + '/socket.io' });
+
 
 if (location.hostname.toLowerCase().startsWith('browsercircus') || location.hostname.toLowerCase().startsWith('www')) {
   socket = io({ path: "/chanel/port-4200/socket.io" });  // yields '/leon/port-4100/socket.io' or '/socket.io'
