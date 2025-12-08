@@ -65,8 +65,10 @@ io.on('connection', (socket) => {
 
   //if from page B, emit "allGraffiti"
   let comesFromDisplayPage = socket.handshake.headers.referer.endsWith("pageB.html")
+  console.log(socket.handshake.headers)
   if (comesFromDisplayPage == true) {
     // socket.emit("allGraffiti", allGraffiti);
+    console.log('sending', allGraffiti)
     io.emit("allGraffiti", allGraffiti);
 
   }
