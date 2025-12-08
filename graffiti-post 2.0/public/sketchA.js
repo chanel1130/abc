@@ -1,3 +1,13 @@
+const prefix = location.pathname.replace(/\/$/, '');      
+const socket = io({ path: prefix + '/socket.io' });
+
+if (location.hostname.toLowerCase().startsWith('browsercircus') || location.hostname.toLowerCase().startsWith('www')) {
+  socket = io({ path: "/chanel/port-4200/socket.io" });  // yields '/leon/port-4100/socket.io' or '/socket.io'
+} else {
+  socket = io();
+}
+
+
 function getOrCreateUserId() {
   // check if we have a userID already in local storage
 
@@ -15,7 +25,7 @@ const myUserId = getOrCreateUserId();
 console.log('My userId:', myUserId);
 
 let myFont;
-let canvas, socket;
+let canvas;
 let touchingCanvas = false;
 let minX = Infinity;
 let minY = Infinity;

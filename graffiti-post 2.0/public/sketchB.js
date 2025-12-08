@@ -1,4 +1,13 @@
 // const { scale } = require("framer-motion");
+const prefix = location.pathname.replace(/\/$/, '');      
+const socket = io({ path: prefix + '/socket.io' });
+
+if (location.hostname.toLowerCase().startsWith('browsercircus') || location.hostname.toLowerCase().startsWith('www')) {
+  socket = io({ path: "/chanel/port-4200/socket.io" });  // yields '/leon/port-4100/socket.io' or '/socket.io'
+} else {
+  socket = io();
+}
+
 
 function getOrCreateUserId() {
   // check if we have a userID already in local storage
@@ -34,7 +43,7 @@ let rotation = 0;
 let lastAngle = null;
 
 
-let socket;
+
 
 
 let allGraffiti = [];
