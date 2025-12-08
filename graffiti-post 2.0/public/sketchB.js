@@ -23,7 +23,7 @@ function getOrCreateUserId() {
 const myUserId = getOrCreateUserId();
 console.log('My userId:', myUserId);
 
-
+socket.emit("identify", myUserId)
 
 let myImg;
 let myImgData;
@@ -136,30 +136,6 @@ function setup() {
     }
   })
 
-  socket.on("new-drawing-from-server", function(d){
-    console.log("got single new drawing", d)
-    d.img = loadImage(d.imgURL, img => {
-          d.img = img;
-          d.timestamp = d.timestamp || Date.now();
-
-    });
-    allGraffiti.push(d);
-  })
-
-  //when other users are editing their graffiti, update in real time
-  socket.on("othersEditingGraffiti", updated => {
-
-    // find the according graffiti
-    let target = allGraffiti.find(g => g.drawingId === updated.drawingId);
-
-    if (target) {
-      target.x = updated.offsetX;
-      target.y = updated.offsetY;
-      target.scaleFactor = updated.scaleFactor;
-      target.rotation = updated.rotation;
-    }
-  });
-
 
   // socket.on("newGraffiti", data => {
   //   data.img = loadImage(data.img);
@@ -171,12 +147,69 @@ function setup() {
 
 }
 
+socket.on("new-drawing-from-server", function (d) {
+  console.log("got single new drawing", d)
+  d.img = loadImage(d.imgURL, img => {
+
+    d.scaleFactor = 0.5 * min(windowWidth / img.width, windowHeight / img.height);
+    d.x = windowWidth / 2;
+    d.y = windowHeight / 2;
+    // d.x = 0;
+    // d.y = 0;
+
+
+
+    d.img = img;
+    d.timestamp = d.timestamp || Date.now();
+
+  });
+  allGraffiti.push(d);
+})
+
+//when other users are editing their graffiti, update in real time
+socket.on("othersEditingGraffiti", updated => {
+
+  // find the according graffiti
+  let target = allGraffiti.find(g => g.drawingId === updated.drawingId);
+
+  if (target) {
+    target.x = updated.offsetX;
+    target.y = updated.offsetY;
+    target.scaleFactor = updated.scaleFactor;
+    target.rotation = updated.rotation;
+  }
+});
+
+socket.on("confirm-drawing-from-server", function (drawingId) {
+  let target = allGraffiti.find(g => g.drawingId === drawingId);
+
+  if (target) {
+    target.locationConfirmed = true;
+
+  }
+})
+
+socket.on("delete-drawing-from-server", function (drawingId) {
+  let idx = allGraffiti.findIndex(g => g.drawingId === drawingId);
+
+  if (idx > -1) {
+    allGraffiti.splice(idx, 1)
+
+  }
+})
+
 function draw() {
   background(0);
 
 
   // draw the historical graffiti
   for (let g of allGraffiti) {
+    if (g.scaleFactor == 1) {
+      // continue
+      //   g.scaleFactor = 0.5 * min(windowWidth / g.img.width, windowHeight / g.img.height);
+      //   g.x = windowWidth / 2;
+      //   g.y = windowHeight / 2;
+    }
     push();
     translate(g.x, g.y);
     // translate(g.offsetX, g.offsetY);

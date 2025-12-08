@@ -55,8 +55,11 @@ let HTTPSserver = https.createServer(options, app)
 
 
 const { Server } = require('socket.io'); // include library
+// const { del } = require('framer-motion/client');
 const io = new Server(HTTPSserver); // start socket io 
 
+
+let displayUsers = {};
 
 io.on('connection', (socket) => {
   // we manage the connection inside here
@@ -64,14 +67,23 @@ io.on('connection', (socket) => {
 
 
   //if from page B, emit "allGraffiti"
-  let comesFromDisplayPage = socket.handshake.headers.referer.endsWith("pageB.html")
-  console.log(socket.handshake.headers)
-  if (comesFromDisplayPage == true) {
-    // socket.emit("allGraffiti", allGraffiti);
+  // let comesFromDisplayPage = socket.handshake.headers.referer.endsWith("pageB.html")
+  // console.log(socket.handshake.headers)
+  // if (comesFromDisplayPage == true) {
+  //   // socket.emit("allGraffiti", allGraffiti);
+  //   console.log('sending', allGraffiti)
+  //   socket.emit("allGraffiti", allGraffiti);
+
+  // }
+
+  socket.on("identify", function(userId){
+    displayUsers[socket.id] = userId;
+    console.log("current display userrs", displayUsers)
+
+
     console.log('sending', allGraffiti)
     socket.emit("allGraffiti", allGraffiti);
-
-  }
+  })
 
 
 
@@ -91,7 +103,8 @@ io.on('connection', (socket) => {
       offsetY: 0,
       scaleFactor: 1,
       rotation: 0,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      socketId: socket.id
     }
 
 
@@ -125,6 +138,8 @@ io.on('connection', (socket) => {
 
   socket.on("saveFinalizedGraffitiToServer", (data) => {
 
+    socket.broadcast.emit("confirm-drawing-from-server", data.drawingId);
+
     // const editingGraffiti = currentEditingGraffiti[socket.id];
     let drawingIndex = allGraffiti.findIndex(g => g.drawingId == data.drawingId)
     if (drawingIndex > -1) {
@@ -157,6 +172,27 @@ io.on('connection', (socket) => {
 
   socket.on("disconnect", function () {
     console.log("someone disconnected", socket.id);
+
+    // let idx = allGraffiti.findIndex(g=> g.socketId == socket.id && g.locationConfirmed == false);
+    // if(idx>-1){
+    //   console.log("deleting", allGraffiti[idx])
+    //   allGraffiti.splice(idx, 1);
+    // }
+    if(displayUsers[socket.id]){
+      console.log(displayUsers[socket.id]);
+      
+      let idx = allGraffiti.findIndex(g=> g.userId == displayUsers[socket.id] && g.locationConfirmed == false);
+      if(idx>-1){
+        console.log("delete-drawing-from-server", allGraffiti[idx])
+        socket.broadcast.emit("delete-drawing-from-server", allGraffiti[idx].drawingId);
+        allGraffiti.splice(idx, 1);
+      }
+
+      delete displayUsers[socket.id]
+      console.log("current dusplay users", displayUsers)
+    }
+
+
     // delete currentEditingGraffiti[socket.id];
 
     // delete user from our records
