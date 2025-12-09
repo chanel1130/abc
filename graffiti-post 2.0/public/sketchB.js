@@ -230,7 +230,7 @@ function draw() {
 
 
 
-
+    //bounding box for other users
     if (g.userId != myUserId && g.locationConfirmed == false) {
       noFill();
       rectMode(CENTER);
