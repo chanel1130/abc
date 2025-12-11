@@ -7,6 +7,7 @@ const fs = require("fs");
 const app = express(); // the server "app", the server behaviour
 
 const portHTTPS = 4201; // port for https
+// const portHTTPS = 3001;
 
 // returning to the client anything that is
 // inside the public folder

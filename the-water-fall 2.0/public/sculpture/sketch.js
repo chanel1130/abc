@@ -12,6 +12,18 @@ let audio4;
 let audio5;
 let audio6;
 
+
+let lastPlayTime = {
+  audio1: 0,
+  audio2: 0,
+  audio3: 0,
+  audio4: 0,
+  audio5: 0,
+  audio6: 0
+};
+
+let cooldown = 2000;
+
 // const audio1 = new Audio('assets/audio/bell1.mp3');
 // const audio2 = new Audio('assets/audio/bell2.mp3');
 // const audio3 = new Audio('assets/audio/bell3.mp3');
@@ -22,19 +34,22 @@ let audio6;
 
 // let socket;
 // socket = io();
-const CUT = 1;
-const parts = location.pathname.replace(/\/+$/, '').split('/').filter(Boolean);
-console.log(parts)
-
-let importantParts = []
-for (p of parts) {
-  importantParts.push(p);
-  if (p.startsWith("port-")) {
-    break
-  }
+if (location.hostname.toLowerCase().startsWith('browsercircus') || location.hostname.toLowerCase().startsWith('www')) {
+  socket = io({ path: "/chanel/port-4201/socket.io" });  // yields '/leon/port-4100/socket.io' or '/socket.io'
+} else {
+  socket = io();
 }
 
-const socket = io({ path: "/" + importantParts.join("/") + '/socket.io' });
+
+// let importantParts = []
+// for (p of parts) {
+//   importantParts.push(p);
+//   if (p.startsWith("port-")) {
+//     break
+//   }
+// }
+
+// const socket = io({ path: "/" + importantParts.join("/") + '/socket.io' });
 
 let button1 = document.querySelector("#button1");
 let button2 = document.querySelector("#button2");
@@ -211,6 +226,7 @@ function draw() {
       b.hit = true;
 
 
+      //play constantly
       // if (number === "4") {
       //   if (b.y >= 0 && b.y <= windowHeight / 6) {
       //     audio1.play();
@@ -239,13 +255,32 @@ function draw() {
       //   }
       // }
 
+
+      //play only once
+      // if (number === "4") {
+      //   if (b.y <= windowHeight / 6) playOnce(audio1);
+      //   else if (b.y <= windowHeight / 3) playOnce(audio2);
+      //   else if (b.y <= windowHeight / 2) playOnce(audio3);
+      //   else if (b.y <= windowHeight * 2 / 3) playOnce(audio4);
+      //   else if (b.y <= windowHeight * 5 / 6) playOnce(audio5);
+      //   else playOnce(audio6);
+      // }
+
+
       if (number === "4") {
-        if (b.y <= windowHeight / 6) playOnce(audio1);
-        else if (b.y <= windowHeight / 3) playOnce(audio2);
-        else if (b.y <= windowHeight / 2) playOnce(audio3);
-        else if (b.y <= windowHeight * 2 / 3) playOnce(audio4);
-        else if (b.y <= windowHeight * 5 / 6) playOnce(audio5);
-        else playOnce(audio6);
+        if (b.y <= windowHeight / 6) {
+          playWithCooldown(audio1, "audio1");
+        } else if (b.y <= windowHeight / 3) {
+          playWithCooldown(audio2, "audio2");
+        } else if (b.y <= windowHeight / 2) {
+          playWithCooldown(audio3, "audio3");
+        } else if (b.y <= windowHeight * 2 / 3) {
+          playWithCooldown(audio4, "audio4");
+        } else if (b.y <= windowHeight * 5 / 6) {
+          playWithCooldown(audio5, "audio5");
+        } else {
+          playWithCooldown(audio6, "audio6");
+        }
       }
 
 
@@ -300,7 +335,19 @@ function draw() {
 
 }
 
+// function playOnce(sound) {
+//   if (!sound.isPlaying()) {
+//     sound.play();
+//   }
+// }
 
+function playWithCooldown(sound, key) {
+  let now = millis();
+  if (now - lastPlayTime[key] > cooldown) {
+    sound.play();
+    lastPlayTime[key] = now;
+  }
+}
 
 socket.on("new-ball", (data) => {
   balls.push({
