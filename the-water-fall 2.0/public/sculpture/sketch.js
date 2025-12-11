@@ -23,18 +23,18 @@ let audio6;
 // let socket;
 // socket = io();
 const CUT = 1;
-const parts = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean);
+const parts = location.pathname.replace(/\/+$/, '').split('/').filter(Boolean);
 console.log(parts)
 
 let importantParts = []
-for(p of parts){
-    importantParts.push(p);
-    if(p.startsWith("port-")){
-        break
-    }
+for (p of parts) {
+  importantParts.push(p);
+  if (p.startsWith("port-")) {
+    break
+  }
 }
 
-const socket = io({ path: "/"+importantParts.join("/") + '/socket.io' });
+const socket = io({ path: "/" + importantParts.join("/") + '/socket.io' });
 
 let button1 = document.querySelector("#button1");
 let button2 = document.querySelector("#button2");
@@ -48,7 +48,7 @@ button1.addEventListener("click", function () {
   button3.remove();
   button4.remove();
   socket.emit("my-number", { number });
-   userStartAudio();
+  userStartAudio();
 })
 
 button2.addEventListener("click", function () {
@@ -58,7 +58,7 @@ button2.addEventListener("click", function () {
   button3.remove();
   button4.remove();
   socket.emit("my-number", { number });
-   userStartAudio();
+  userStartAudio();
 })
 
 button3.addEventListener("click", function () {
@@ -68,7 +68,7 @@ button3.addEventListener("click", function () {
   button3.remove();
   button4.remove();
   socket.emit("my-number", { number });
-   userStartAudio();
+  userStartAudio();
   // loadAudios();
 
 
@@ -126,7 +126,7 @@ button4.addEventListener("click", function () {
   button3.remove();
   button4.remove();
   socket.emit("my-number", { number });
-   userStartAudio();
+  userStartAudio();
 
 
 
@@ -211,33 +211,43 @@ function draw() {
       b.hit = true;
 
 
+      // if (number === "4") {
+      //   if (b.y >= 0 && b.y <= windowHeight / 6) {
+      //     audio1.play();
+      //     // playAudio(audio1);
+      //     console.log("play1")
+      //   } else if (b.y > windowHeight / 6 && b.y <= windowHeight / 3) {
+      //     audio2.play();
+      //     // playAudio(audio2);
+      //     console.log("play2")
+      //   } else if (b.y > windowHeight / 3 && b.y <= windowHeight / 2) {
+      //     audio3.play();
+      //     // playAudio(audio3);
+      //     console.log("play3")
+      //   } else if (b.y > windowHeight / 2 && b.y <= windowHeight * 2 / 3) {
+      //     audio4.play();
+      //     // playAudio(audio4);
+      //     console.log("play4")
+      //   } else if (b.y > windowHeight * 2 / 3 && b.y <= windowHeight * 5 / 6) {
+      //     audio5.play();
+      //     // playAudio(audio5);
+      //     console.log("play5")
+      //   } else {
+      //     audio6.play();
+      //     // playAudio(audio6);
+      //     console.log("play6")
+      //   }
+      // }
+
       if (number === "4") {
-        if (b.y >= 0 && b.y <= windowHeight / 6) {
-          audio1.play();
-          // playAudio(audio1);
-          console.log("play1")
-        } else if (b.y > windowHeight / 6 && b.y <= windowHeight / 3) {
-          audio2.play();
-          // playAudio(audio2);
-          console.log("play2")
-        } else if (b.y > windowHeight / 3 && b.y <= windowHeight / 2) {
-          audio3.play();
-          // playAudio(audio3);
-          console.log("play3")
-        } else if (b.y > windowHeight / 2 && b.y <= windowHeight * 2 / 3) {
-          audio4.play();
-          // playAudio(audio4);
-          console.log("play4")
-        } else if (b.y > windowHeight * 2 / 3 && b.y <= windowHeight * 5 / 6) {
-          audio5.play();
-          // playAudio(audio5);
-          console.log("play5")
-        } else {
-          audio6.play();
-          // playAudio(audio6);
-          console.log("play6")
-        }
+        if (b.y <= windowHeight / 6) playOnce(audio1);
+        else if (b.y <= windowHeight / 3) playOnce(audio2);
+        else if (b.y <= windowHeight / 2) playOnce(audio3);
+        else if (b.y <= windowHeight * 2 / 3) playOnce(audio4);
+        else if (b.y <= windowHeight * 5 / 6) playOnce(audio5);
+        else playOnce(audio6);
       }
+
 
 
       socket.emit("ball-finished", {
