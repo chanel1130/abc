@@ -30,7 +30,10 @@ let cooldown = 2000;
 // const audio4 = new Audio('assets/audio/bell4.mp3');
 // const audio5 = new Audio('assets/audio/bell5.mp3');
 // const audio6 = new Audio('assets/audio/bell6.mp3');
-
+let button1 = document.querySelector("#button1");
+let button2 = document.querySelector("#button2");
+let button3 = document.querySelector("#button3");
+let button4 = document.querySelector("#button4");
 
 // let socket;
 // socket = io();
@@ -65,10 +68,7 @@ if(needsStartButton){
 
 // const socket = io({ path: "/" + importantParts.join("/") + '/socket.io' });
 
-let button1 = document.querySelector("#button1");
-let button2 = document.querySelector("#button2");
-let button3 = document.querySelector("#button3");
-let button4 = document.querySelector("#button4");
+
 
 button1.addEventListener("click", function () {
   number = "1";
