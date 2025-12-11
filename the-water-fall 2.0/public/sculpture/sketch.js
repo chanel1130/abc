@@ -40,6 +40,20 @@ if (location.hostname.toLowerCase().startsWith('browsercircus') || location.host
   socket = io();
 }
 
+let needsStartButton = true;
+
+
+number = "1";
+button1.remove();
+button2.remove();
+button3.remove();
+button4.remove();
+socket.emit("my-number", { number });
+
+
+if(needsStartButton){
+  document.querySelector("#startButton").style.display = "block";
+}
 
 // let importantParts = []
 // for (p of parts) {

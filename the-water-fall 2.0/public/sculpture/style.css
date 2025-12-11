@@ -25,3 +25,11 @@ canvas {
 
 }
 
+
+#startButton{
+  width:90px;
+  height:60px;
+  font-size: 25px;
+  display: none;
+
+}
