@@ -6,7 +6,7 @@ const fs = require("fs");
 
 const app = express(); // the server "app", the server behaviour
 
-const portHTTPS = 3001; // port for https
+const portHTTPS = 4210; // port for https
 
 // returning to the client anything that is
 // inside the public folder
@@ -31,9 +31,14 @@ const HTTPSserver = https.createServer(options, app);
 const { Server } = require('socket.io'); //include library
 const io = new Server(HTTPSserver); //start socket io
 
+
+
+
 let one;
 let two;
 let three;
+let four;
+
 io.on("connection", (socket) => {
 
     console.log('a user connected', socket.id);
@@ -44,50 +49,48 @@ io.on("connection", (socket) => {
 
     socket.on("my-number", function (data) {
         console.log(data);
-        if(data.number == "1"){
+        if (data.number == "1") {
             one = socket.id;
         }
-        else if(data.number == "2"){
+        else if (data.number == "2") {
             two = socket.id;
         }
-        else if (data.number == "3"){
+        else if (data.number == "3") {
             three = socket.id;
+        }else if (data.number == "4"){
+            four = socket.id;
         }
 
     })
 
 
-socket.on("sand-finished",(data)=>{
-    if(data.from == "1" && two){
-        io.to(two).emit("new-sand", {y: data.y, size:data.size});
-    }
-    else if(data.from == "2" && three){
-        io.to(three).emit("pile-sand", {y: data.y, size:data.size});
-    }
-    // else if(data.from == "3" && three){
-    //     io.to(three).emit("pile-sand", {y: data.y, size:data.size});
-    // }
-});
+    socket.on("ball-finished", (data) => {
+        if (data.from == "1" && two) {
+            io.to(two).emit("new-ball", { y: data.y, size: data.size });
+        }
+        else if (data.from == "2" && three) {
+            io.to(three).emit("new-ball", { y: data.y, size: data.size });
+        }
+        else if (data.from == "3" && four) {
+            io.to(four).emit("new-ball", { y: data.y, size: data.size });
+        } 
+        else if (data.from == "4" && four) {
+            io.to(four).emit("ball-bounce", { y: data.y, size: data.size });
+        }
+    });
 
-socket.on("fish-finished",(data)=>{
-    if(data.from == "2" && three){
-        io.to(three).emit("pile-fish",{
-            y: data.y, size:data.size
-        })
-    }
-})
+    socket.on("ball-bounce-to-next-screen", (data) => {
 
-// socket.on("ball-bounce-to-next-screen",(data)=>{
-//     if(data.from == "3" && two){
-//         io.to(two).emit("ball-bounce", {y: data.y, size:data.size});
-//     }
-//     if(data.from == "2" && one){
-//         io.to(one).emit("ball-bounce", {y: data.y, size:data.size});
-//     }
-//     if(data.from == "1" && one){
-//         io.to(one).emit("ball-bounce-back", {y: data.y, size:data.size})
-//     }
-// })
+        if (data.from == "4" && three) {
+            io.to(three).emit("ball-bounce", { y: data.y, size: data.size, vy: data.vy, gy: data.gy });
+        }
+        if (data.from == "3" && two) {
+            io.to(two).emit("ball-bounce", { y: data.y, size: data.size, vy: data.vy, gy: data.gy });
+        }
+       if (data.from == "2" && one) {
+            io.to(one).emit("ball-bounce", { y: data.y, size: data.size, vy: data.vy, gy: data.gy });
+        }
+    })
 
 
 })

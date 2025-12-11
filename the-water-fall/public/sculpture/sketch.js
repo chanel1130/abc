@@ -1,31 +1,54 @@
-// const audio = new Audio('marble.mp3'); 
-
-
-let sandsFall = [];
-let sands = [];
-let fishFall = [];
-let fish = [];
-
+let balls = [];
+let bounceBalls = [];
 let spawnInterval = null;
 let number;
-let displayWaterHeight = 0;
-let waterHeight = 60;
+let yToGy = {};
 
-let socket;
-socket = io();
 
+let audio1;
+let audio2;
+let audio3;
+let audio4;
+let audio5;
+let audio6;
+
+// const audio1 = new Audio('assets/audio/bell1.mp3');
+// const audio2 = new Audio('assets/audio/bell2.mp3');
+// const audio3 = new Audio('assets/audio/bell3.mp3');
+// const audio4 = new Audio('assets/audio/bell4.mp3');
+// const audio5 = new Audio('assets/audio/bell5.mp3');
+// const audio6 = new Audio('assets/audio/bell6.mp3');
+
+
+// let socket;
+// socket = io();
+const CUT = 1;
+const parts = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean);
+console.log(parts)
+
+let importantParts = []
+for(p of parts){
+    importantParts.push(p);
+    if(p.startsWith("port-")){
+        break
+    }
+}
+
+const socket = io({ path: "/"+importantParts.join("/") + '/socket.io' });
 
 let button1 = document.querySelector("#button1");
 let button2 = document.querySelector("#button2");
 let button3 = document.querySelector("#button3");
-let button4 = document.querySelector("#button3");
+let button4 = document.querySelector("#button4");
 
 button1.addEventListener("click", function () {
   number = "1";
   button1.remove();
   button2.remove();
   button3.remove();
-  socket.emit("my-number", { number })
+  button4.remove();
+  socket.emit("my-number", { number });
+   userStartAudio();
 })
 
 button2.addEventListener("click", function () {
@@ -33,7 +56,9 @@ button2.addEventListener("click", function () {
   button1.remove();
   button2.remove();
   button3.remove();
-  socket.emit("my-number", { number })
+  button4.remove();
+  socket.emit("my-number", { number });
+   userStartAudio();
 })
 
 button3.addEventListener("click", function () {
@@ -41,232 +66,268 @@ button3.addEventListener("click", function () {
   button1.remove();
   button2.remove();
   button3.remove();
-  socket.emit("my-number", { number })
+  button4.remove();
+  socket.emit("my-number", { number });
+   userStartAudio();
+  // loadAudios();
+
+
+  // audio1 = document.createElement("audio");
+  // audio1.innerHTML = `
+  //       <source src="assets/audio/bell1.mp3" type="audio/mpeg">
+  //       Your browser does not support the audio element.
+  //   `
+
+  // audio2 = document.createElement("audio");
+  // audio2.innerHTML = `
+  //       <source src="assets/audio/bell2.mp3" type="audio/mpeg">
+  //       Your browser does not support the audio element.
+  //   `
+
+  // audio3 = document.createElement("audio");
+  // audio3.innerHTML = `
+  //       <source src="assets/audio/bell3.mp3" type="audio/mpeg">
+  //       Your browser does not support the audio element.
+  //   `
+
+  // audio4 = document.createElement("audio");
+  // audio4.innerHTML = `
+  //       <source src="assets/audio/bell4.mp3" type="audio/mpeg">
+  //       Your browser does not support the audio element.
+  //   `
+
+  // audio5 = document.createElement("audio");
+  // audio5.innerHTML = `
+  //       <source src="assets/audio/bell5.mp3" type="audio/mpeg">
+  //       Your browser does not support the audio element.
+  //   `
+
+  // audio6 = document.createElement("audio");
+  // audio6.innerHTML = `
+  //       <source src="assets/audio/bell6.mp3" type="audio/mpeg">
+  // Your browser does not support the audio element.
+  // `
+
+  // audio1 = new Audio('assets/audio/bell1.mp3');
+  // audio2 = new Audio('assets/audio/bell2.mp3');
+  // audio3 = new Audio('assets/audio/bell3.mp3');
+  // audio4 = new Audio('assets/audio/bell4.mp3');
+  // audio5 = new Audio('assets/audio/bell5.mp3');
+  // audio6 = new Audio('assets/audio/bell6.mp3');
+
+
+
 })
+
+button4.addEventListener("click", function () {
+  number = "4";
+  button1.remove();
+  button2.remove();
+  button3.remove();
+  button4.remove();
+  socket.emit("my-number", { number });
+   userStartAudio();
+
+
+
+})
+
+
+
+
+function preload() {
+  audio1 = loadSound("assets/audio/bell1.mp3");
+  audio2 = loadSound("assets/audio/bell2.mp3");
+  audio3 = loadSound("assets/audio/bell3.mp3");
+  audio4 = loadSound("assets/audio/bell4.mp3");
+  audio5 = loadSound("assets/audio/bell5.mp3");
+  audio6 = loadSound("assets/audio/bell6.mp3");
+}
+
 
 function setup() {
   let canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("p5-canvas-container");
 
 
+  noise = new p5.Noise('pink');
+  filter = new p5.HighPass();
+  reverb = new p5.Reverb();
+
+  noise.disconnect();
+  noise.connect(filter);
+  filter.connect(reverb);
+  filter.freq(800);
+  filter.res(1.5);
+  reverb.amp(0.2);
+  reverb.drywet(0.3);
+
+  noise.amp(0);
+
+}
+
+
+function playAudio(audio) {
+  // const clone = audio.cloneNode();
+  // clone.currentTime = 0;
+  // clone.play();
+
+  if (audio && audio.isLoaded()) {
+    audio.play();
+  }
+
 }
 
 function draw() {
-  background(0);
-
-  //the water level
-  if (number === "3") {
-    fill(30, 76, 87);
-    displayWaterHeight = lerp(displayWaterHeight, waterHeight, 0.05);
-    let flow = sin(frameCount * 0.05) * 2;
-    let dynamicWaterHeight = displayWaterHeight + flow;
-    rect(0, 0, dynamicWaterHeight, windowHeight);
-  }
-  // fill(0, 20);
-  // rect(0, 0, windowWidth, windowHeight);
+  // background(0);
+  fill(0, 20);
+  rect(0, 0, windowWidth, windowHeight);
   noStroke();
   fill(255, 200);
 
+  for (let i = balls.length - 1; i >= 0; i--) {
+    let b = balls[i];
 
+    if (number === "1") {
+      b.gx = 0.4;
+    } else if (number === "2") {
+      b.gx = 0.35;
+    } else if (number === "3") {
+      b.gx = 0.3;
+    } else if (number === "4") {
+      b.gx = 0.25;
+    };
 
-  for (let i = sandsFall.length - 1; i >= 0; i--) {
-    let s = sandsFall[i];
-    s.x -= s.vx;
-    s.vx += s.gx;
+    b.x -= b.vx;
+    b.vx += b.gx;
 
-
-    let speed = abs(s.vx) + abs(s.gx);
-    // let baseFreq;
-    // if (s.screenNumber === "1") {
-    //   baseFreq = 2500;
-    // } else if (s.screenNumber === "2") {
-    //   baseFreq = 1000;
-    // }
-    let freq = 1000 + random(-80, 80) + speed * 800;
-    let amp = map(speed, 0, 3, 0.01, 0.04);
-
-    if (s.noise) {
-      s.filter.freq(freq);
-      s.noise.amp(amp, 0.001);
+    if (b.hit === undefined) {
+      b.hit = false;
     }
 
 
     //stop at the edge of the screen
-    if (s.x + s.size / 2 <= 0) {
-      // b.vx = 0;
-      // b.gx = 0;
+    if (b.x + b.size / 2 <= 0 && !b.hit) {
+      b.hit = true;
 
-      if (s.noise) {
-        s.noise.amp(0, 0.3);
-        setTimeout(() => s.noise.stop(), 300);
-        s.noise = null;
-      }
 
-      socket.emit("sand-finished", { y: s.y, size: s.size, from: number });
-      sandsFall.splice(i, 1);
-    }
-    // circle(s.x, s.y, s.size);
-    drawSand(s.x, s.y, s.size);
-  }
-
-  for (let i = sands.length - 1; i >= 0; i--) {
-
-    let s = sands[i];
-    s.x -= s.vx;
-    s.vx += s.gx;
-
-    if (s.x <= waterHeight) {
-      s.vx = 0.2;
-      if (s.x - s.size / 2 <= 0) {
-        s.x = s.size / 2;
-        s.vx = 0;
-        s.gx = 0;
-
-        if (!s.hitGround) {
-          s.hitGround = true;
-          waterHeight += 2;
+      if (number === "4") {
+        if (b.y >= 0 && b.y <= windowHeight / 6) {
+          audio1.play();
+          // playAudio(audio1);
+          console.log("play1")
+        } else if (b.y > windowHeight / 6 && b.y <= windowHeight / 3) {
+          audio2.play();
+          // playAudio(audio2);
+          console.log("play2")
+        } else if (b.y > windowHeight / 3 && b.y <= windowHeight / 2) {
+          audio3.play();
+          // playAudio(audio3);
+          console.log("play3")
+        } else if (b.y > windowHeight / 2 && b.y <= windowHeight * 2 / 3) {
+          audio4.play();
+          // playAudio(audio4);
+          console.log("play4")
+        } else if (b.y > windowHeight * 2 / 3 && b.y <= windowHeight * 5 / 6) {
+          audio5.play();
+          // playAudio(audio5);
+          console.log("play5")
+        } else {
+          audio6.play();
+          // playAudio(audio6);
+          console.log("play6")
         }
       }
+
+
+      socket.emit("ball-finished", {
+        y: b.y,
+        size: b.size,
+        from: number
+      });
+      balls.splice(i, 1);
+    } else if (b.x + b.size / 2 > 0) {
+      b.hit = false;
     }
-
-    //collision + piling up
-    for (let j = 0; j < sands.length; j++) {
-      if (i != j) {
-        let o = sands[j];
-        let dx = o.x - s.x;
-        let dy = o.y - s.y;
-        let d = sqrt(dx * dx + dy * dy);
-        let minD = (s.size + o.size) / 2;
-        if (d < minD) {
-
-          let overlap = (minD - d) / 2;
-          let angle = atan2(dy, dx);
-          s.x -= cos(angle) * overlap;
-          s.y -= sin(angle) * overlap;
-          o.x += cos(angle) * overlap;
-          o.y += sin(angle) * overlap;
-
-          let tvy = s.vy;
-          s.vy = o.vy;
-          o.vy = tvy;
-        }
-      }
-    }
-
-    //circle(s.x, s.y, s.size);
-    drawSand(s.x, s.y, s.size);
+    circle(b.x, b.y, b.size);
   }
 
-  fill(255, 255, 200);
-  for (let i = fishFall.length - 1; i >= 0; i--) {
-    let f = fishFall[i];
-    f.x -= f.vx;
-    f.vx += f.gx;
 
-    if (f.x + f.size / 2 <= 0) {
-      socket.emit("fish-finished", { y: f.y, size: f.size, from: number });
-      fishFall.splice(i, 1);
+
+  for (let i = bounceBalls.length - 1; i >= 0; i--) {
+    let b = bounceBalls[i];
+
+    b.x += b.vx;
+    b.vx += b.gx;
+    b.y += b.vy;
+    b.vy += b.gy;
+
+
+    if (b.y + b.size / 2 < 0 || b.y - b.size / 2 > windowHeight) {
+      b.vy = - b.vy;
+      // b.color = color(random(100, 255), random(100, 255), random(100, 255));
+
     }
 
-    circle(f.x, f.y, f.size);
+    if (b.x + b.size / 2 >= windowWidth) {
 
+
+      socket.emit("ball-bounce-to-next-screen", {
+        y: b.y,
+        size: b.size,
+        vy: b.vy,
+        gy: b.gy,
+        from: number
+      });
+      // bounceBalls.splice(i, 1);
+      setTimeout(() => bounceBalls.splice(i, 1), 20);
+    }
+
+    // fill(204, 255, 255);
+    fill(b.color || color(204, 255, 255));
+    circle(b.x, b.y, b.size);
   }
 
-  for (let i = fish.length - 1; i >= 0; i--) {
-    let f = fish[i];
-    let glowSize = f.size;
-    let color;
-    f.x -= f.vx;
-    f.vx += f.gx;
-
-
-    if (f.x <= waterHeight - random(8, 30)) {
-      f.hitWater = true;
-      f.vx = 0;
-    }
-
-    if (f.hitWater) {
-      // outside glow
-      for (let i = 3; i > 0; i--) {
-        let glowSize = f.size * (1 + i * 0.3);
-        let alpha = 50 - i * 10;
-        fill(255, 200, 255, alpha);
-        circle(f.x, f.y, glowSize);
-      }
-
-      fill(255, 255, 200, 180);
-      circle(f.x, f.y, f.size);
-
-      // swimming
-      if (frameCount % 60 == 0) {
-        f.targetY = f.y - random(-100, 100);
-      }
-      f.y += (f.targetY - f.y) * 0.05;
-    }
-
-    else {
-      f.y += f.vy;
-      fill(255, 255, 200);
-      circle(f.x, f.y, f.size);
-    }
-
-
-    circle(f.x, f.y, f.size);
-
-
-  }
 }
 
 
-socket.on("new-sand", (data) => {
-  sandsFall.push({
+
+socket.on("new-ball", (data) => {
+  balls.push({
     x: width,
     y: data.y,
     vx: 1,
+    vy: 0,
     gx: 0.3,
+    gy: 0,
     size: data.size
   })
 })
 
-socket.on("pile-sand", (data) => {
-  sands.push({
-    x: width,
-    y: data.y,
-    vx: 1,
-    gx: 0.3,
-    vy: 0,
-    gy: 0.3,
-    size: data.size,
-    hitGround: false
+socket.on("ball-bounce", (data) => {
 
+  //if coming from the same y axis, give a same random gy
+  //to bounce back
+  let sharedGy;
+  if (typeof data.gy !== "undefined") {
+    sharedGy = data.gy;
+  } else {
+    if (!yToGy[data.y]) {
+      yToGy[data.y] = randomInRange(-0.5, 0.5);
+    }
+    sharedGy = yToGy[data.y];
+  }
+
+  bounceBalls.push({
+    x: 0,
+    y: data.y,
+    vx: 0.5,
+    vy: 0.5,
+    gx: 0.3,
+    gy: sharedGy,
+    size: data.size
   })
 })
-
-socket.on("pile-fish", (data) => {
-  fish.push({
-    x: width,
-    y: data.y,
-    targetY: data.y,
-    vx: 1,
-    gx: 0.3,
-    vy: 0,
-    gy: 0.3,
-    size: data.size,
-    hitWater: false
-  })
-})
-
-// socket.on("ball-bounce", (data) => {
-//   bounceBalls.push({
-//     x: 0,
-//     y: data.y,
-//     vx: 0.5,
-//     vy: 0.5,
-//     gx: 0.3,
-//     gy: random(-0.5, 0.5),
-//     size: data.size
-//   })
-// })
 
 // socket.on("ball-bounce-back", (data)=>{
 //     bounceBalls.push({
@@ -284,123 +345,62 @@ socket.on("pile-fish", (data) => {
 
 // P5 touch events: https://p5js.org/reference/#Touch
 
-
-function drawSand(x, y, size) {
-  // push();
-  // noStroke();
-
-  // // outside glow
-  // for (let i = 3; i > 0; i--) {
-  //   let glowSize = size * (1 + i * 0.2);
-  //   let alpha = 40 - i * 10;
-  //   fill(180, 200, 255, alpha);
-  //   circle(x, y, glowSize);
-  // }
-
-  // // main color + offset
-  // // fill(200 + random(-20, 20), 220 + random(-10, 10), 255, 180);
-  // // beginShape();
-  // // let offset = random(1000);
-  // // for (let a = 0; a < TWO_PI; a += radians(30)) {
-  // //   let r = size / 2 + noise(offset + cos(a) * 0.1, offset + sin(a) * 0.1) * 6 - 2;
-  // //   let sx = x + cos(a) * r;
-  // //   let sy = y + sin(a) * r;
-  // //   vertex(sx, sy);
-  // // }
-  // // endShape(CLOSE);
-  // fill(200 + random(-20, 20), 220 + random(-10, 10), 255, 180);
-  // circle(x,y,size);
-
-  // pop();
-
-  push();
-
-  // 球体的底色（半透明蓝色）
-  fill(180, 220, 255, 80);
-  ellipse(x, y, size);
-
-  // 内层渐变（制造球面深度）
-  for (let r = size * 0.9; r > 0; r -= 4) {
-    let alpha = map(r, 0, size * 0.9, 0, 80);
-    fill(200, 230, 255, alpha);
-    ellipse(x, y, r);
-  }
-
-  // 高光（亮斑）
-  fill(255, 255, 255, 180);
-  ellipse(x - size * 0.2, y - size * 0.2, size * 0.3);
-
-  // 反光（下半部一点点）
-  fill(255, 255, 255, 40);
-  ellipse(x + size * 0.15, y + size * 0.25, size * 0.5, size * 0.3);
-
-  pop();
-}
+let noise, filter, reverb;
+function touchStarted(event) {
 
 
-
-function touchStarted() {
-  userStartAudio();
 
   if (!spawnInterval) {
     spawnInterval = setInterval(() => {
       //touches: a built-in global variable
       for (let t of touches) {
-        if (number === "1") {
-  
-          // audio.play();
-
-          //create the sound
-          let noise = new p5.Noise('white');
-          let filter = new p5.HighPass();
-          let reverb = new p5.Reverb();
-          noise.disconnect();
-          noise.connect(filter);
-          filter.connect(reverb);
-          reverb.amp(0.3);
-          reverb.drywet(0.25);
-          noise.start();
-          noise.amp(0.02, 0.1);
-
-
-          sandsFall.push({
-            x: t.x,
-            y: t.y,
-            vx: 1,
-            gx: 0.3,
-            size: random(30, 50),
-            noise: noise,
-            filter: filter,
-            reverb: reverb,
-            screenNumber: number
-          })
-          // playMarbleSound("1");
-        }
-        else if (number === "2") {
-          fishFall.push({
-            x: t.x,
-            y: t.y,
-            vx: 1,
-            vy: random(-1, 1),
-            gx: 0.3,
-            gy: 0.3,
-            size: random(10, 15)
-          })
-        }
-
+        balls.push({
+          x: t.x,
+          y: t.y,
+          vx: 1,
+          vy: 0,
+          gx: 0.3,
+          gy: 0,
+          size: random(10, 30),
+          // noise: noise,
+          // filter: filter,
+          // reverb: reverb
+        })
       }
-    }, 100) // spawn a ball every xx milliseconds
+    }, 100) // spawn a ball every 50 milliseconds
   }
 
+  //don't make any sound when pressing the buttons
+  if (
+    event.target.tagName === "BUTTON" ||
+    event.target.id === "button1" ||
+    event.target.id === "button2" ||
+    event.target.id === "button3" ||
+    event.target.id === "button4"
+  ) {
+    return;
+  }
+
+
+  userStartAudio();
+  //create the sound
+  noise.start();
+  noise.amp(0.01, 2);
 }
 
 function touchMoved() {
-  clearInterval(spawnInterval);
-  spawnInterval = null;
+
+
+
 }
 
 function touchEnded() {
-
+  clearInterval(spawnInterval);
+  spawnInterval = null;
+  if (noise) {
+    noise.amp(0, 2);
+    setTimeout(() => noise.stop(), 2000);
+  }
 
 }
 
@@ -410,35 +410,6 @@ function windowResized() {
 
 
 
-
-
-// function playMarbleSound(screenNumber) {
-//   userStartAudio(); 
-
-//   let noise = new p5.Noise('white');
-//   let filter = new p5.HighPass();
-//   let reverb = new p5.Reverb();
-
-//   noise.disconnect();
-//   noise.connect(filter);
-//   filter.connect(reverb);
-
-//   //frequency based on screen numbers
-//   let freqBase;
-//   if (screenNumber === "1") freqBase = 2500; // fast
-//   else if (screenNumber === "2") freqBase = 1800; // mid
-//   else freqBase = 1200; // slow
-
-
-//   let freq = freqBase + random(-150, 150);
-//   filter.freq(freq);
-
-//   reverb.amp(0.3);
-//   reverb.drywet(0.25);
-
-//   noise.start();
-//   noise.amp(0.03, 0.01); // transition in
-//   noise.amp(0, 0.3); // transition out
-//   // setTimeout(() => noise.stop(), 400);
-// }
-
+function randomInRange(min, max) {
+  return Math.random() * (max - min) + min;
+}
