@@ -47,10 +47,10 @@ let linkForMe = document.querySelector("#link-for-me");
 
 let urlString = window.location.search;
 let urlParams = new URLSearchParams(urlString);
-let visitor = urlParams.get('me') || 0;
+let visitor = urlParams.get('visitor') || 0;
 
 linkForMe.addEventListener("click", function () {
-  document.location = "index.html?visitor=" + visitor;
+  document.location = "index.html?visitor=me";
 })
 
 if(visitor === "me"){
@@ -86,6 +86,7 @@ function selectNumber(num) {
   button2.remove();
   button3.remove();
   button4.remove();
+  startButton.remove();
 
   socket.emit("my-number", { number });
   userStartAudio();
