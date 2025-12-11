@@ -1,3 +1,12 @@
+// let socket;
+// socket = io();
+if (location.hostname.toLowerCase().startsWith('browsercircus') || location.hostname.toLowerCase().startsWith('www')) {
+  socket = io({ path: "/chanel/port-4201/socket.io" });  // yields '/leon/port-4100/socket.io' or '/socket.io'
+} else {
+  socket = io();
+}
+
+
 let balls = [];
 let bounceBalls = [];
 let spawnInterval = null;
@@ -24,141 +33,171 @@ let lastPlayTime = {
 
 let cooldown = 2000;
 
-// const audio1 = new Audio('assets/audio/bell1.mp3');
-// const audio2 = new Audio('assets/audio/bell2.mp3');
-// const audio3 = new Audio('assets/audio/bell3.mp3');
-// const audio4 = new Audio('assets/audio/bell4.mp3');
-// const audio5 = new Audio('assets/audio/bell5.mp3');
-// const audio6 = new Audio('assets/audio/bell6.mp3');
+
+
+
 let button1 = document.querySelector("#button1");
 let button2 = document.querySelector("#button2");
 let button3 = document.querySelector("#button3");
 let button4 = document.querySelector("#button4");
 
-// let socket;
-// socket = io();
-if (location.hostname.toLowerCase().startsWith('browsercircus') || location.hostname.toLowerCase().startsWith('www')) {
-  socket = io({ path: "/chanel/port-4201/socket.io" });  // yields '/leon/port-4100/socket.io' or '/socket.io'
-} else {
-  socket = io();
-}
-
-let needsStartButton = true;
 
 
-number = "1";
-button1.remove();
-button2.remove();
-button3.remove();
-button4.remove();
-socket.emit("my-number", { number });
+let linkForMe = document.querySelector("#link-for-me");
 
+let urlString = window.location.search;
+let urlParams = new URLSearchParams(urlString);
+let visitor = urlParams.get('me') || 0;
 
-if(needsStartButton){
+linkForMe.addEventListener("click", function () {
+  document.location = "index.html?visitor=" + visitor;
+})
+
+if(visitor === "me"){
+  //show 4 buttons
+  document.querySelector("#button1").style.display = "block";
+  document.querySelector("#button2").style.display = "block";
+  document.querySelector("#button3").style.display = "block";
+  document.querySelector("#button4").style.display = "block";
+  document.querySelector("#startButton").style.display = "none";
+
+}else {
+  //show start button
+  document.querySelector("#button1").style.display = "none";
+  document.querySelector("#button2").style.display = "none";
+  document.querySelector("#button3").style.display = "none";
+  document.querySelector("#button4").style.display = "none";
   document.querySelector("#startButton").style.display = "block";
 }
 
-// let importantParts = []
-// for (p of parts) {
-//   importantParts.push(p);
-//   if (p.startsWith("port-")) {
-//     break
-//   }
+
+button1.addEventListener("click", () => selectNumber("1"));
+button2.addEventListener("click", () => selectNumber("2"));
+button3.addEventListener("click", () => selectNumber("3"));
+button4.addEventListener("click", () => selectNumber("4"));
+//let start button do the same thing as button 1
+startButton.addEventListener("click", () => selectNumber("1"));
+
+
+function selectNumber(num) {
+  number = num;
+
+  button1.remove();
+  button2.remove();
+  button3.remove();
+  button4.remove();
+
+  socket.emit("my-number", { number });
+  userStartAudio();
+}
+
+
+
+
+
+
+
+
+// if (needsStartButton) {
+//   document.querySelector("#startButton").style.display = "block";
 // }
 
-// const socket = io({ path: "/" + importantParts.join("/") + '/socket.io' });
 
 
 
-button1.addEventListener("click", function () {
-  number = "1";
-  button1.remove();
-  button2.remove();
-  button3.remove();
-  button4.remove();
-  socket.emit("my-number", { number });
+// button1.addEventListener("click", function () {
+//   number = "1";
+//   button1.remove();
+//   button2.remove();
+//   button3.remove();
+//   button4.remove();
+//   socket.emit("my-number", { number });
+//   userStartAudio();
+// })
+
+// button2.addEventListener("click", function () {
+//   number = "2";
+//   button1.remove();
+//   button2.remove();
+//   button3.remove();
+//   button4.remove();
+//   socket.emit("my-number", { number });
+//   userStartAudio();
+// })
+
+// button3.addEventListener("click", function () {
+//   number = "3";
+//   button1.remove();
+//   button2.remove();
+//   button3.remove();
+//   button4.remove();
+//   socket.emit("my-number", { number });
+//   userStartAudio();
+//   // loadAudios();
+
+
+//   // audio1 = document.createElement("audio");
+//   // audio1.innerHTML = `
+//   //       <source src="assets/audio/bell1.mp3" type="audio/mpeg">
+//   //       Your browser does not support the audio element.
+//   //   `
+
+//   // audio2 = document.createElement("audio");
+//   // audio2.innerHTML = `
+//   //       <source src="assets/audio/bell2.mp3" type="audio/mpeg">
+//   //       Your browser does not support the audio element.
+//   //   `
+
+//   // audio3 = document.createElement("audio");
+//   // audio3.innerHTML = `
+//   //       <source src="assets/audio/bell3.mp3" type="audio/mpeg">
+//   //       Your browser does not support the audio element.
+//   //   `
+
+//   // audio4 = document.createElement("audio");
+//   // audio4.innerHTML = `
+//   //       <source src="assets/audio/bell4.mp3" type="audio/mpeg">
+//   //       Your browser does not support the audio element.
+//   //   `
+
+//   // audio5 = document.createElement("audio");
+//   // audio5.innerHTML = `
+//   //       <source src="assets/audio/bell5.mp3" type="audio/mpeg">
+//   //       Your browser does not support the audio element.
+//   //   `
+
+//   // audio6 = document.createElement("audio");
+//   // audio6.innerHTML = `
+//   //       <source src="assets/audio/bell6.mp3" type="audio/mpeg">
+//   // Your browser does not support the audio element.
+//   // `
+
+//   // audio1 = new Audio('assets/audio/bell1.mp3');
+//   // audio2 = new Audio('assets/audio/bell2.mp3');
+//   // audio3 = new Audio('assets/audio/bell3.mp3');
+//   // audio4 = new Audio('assets/audio/bell4.mp3');
+//   // audio5 = new Audio('assets/audio/bell5.mp3');
+//   // audio6 = new Audio('assets/audio/bell6.mp3');
+
+
+
+// })
+
+// button4.addEventListener("click", function () {
+//   number = "4";
+//   button1.remove();
+//   button2.remove();
+//   button3.remove();
+//   button4.remove();
+//   socket.emit("my-number", { number });
+//   userStartAudio();
+
+
+
+// })
+
+document.querySelector("#startButton").addEventListener("click", function () {
   userStartAudio();
-})
-
-button2.addEventListener("click", function () {
-  number = "2";
-  button1.remove();
-  button2.remove();
-  button3.remove();
-  button4.remove();
-  socket.emit("my-number", { number });
-  userStartAudio();
-})
-
-button3.addEventListener("click", function () {
-  number = "3";
-  button1.remove();
-  button2.remove();
-  button3.remove();
-  button4.remove();
-  socket.emit("my-number", { number });
-  userStartAudio();
-  // loadAudios();
-
-
-  // audio1 = document.createElement("audio");
-  // audio1.innerHTML = `
-  //       <source src="assets/audio/bell1.mp3" type="audio/mpeg">
-  //       Your browser does not support the audio element.
-  //   `
-
-  // audio2 = document.createElement("audio");
-  // audio2.innerHTML = `
-  //       <source src="assets/audio/bell2.mp3" type="audio/mpeg">
-  //       Your browser does not support the audio element.
-  //   `
-
-  // audio3 = document.createElement("audio");
-  // audio3.innerHTML = `
-  //       <source src="assets/audio/bell3.mp3" type="audio/mpeg">
-  //       Your browser does not support the audio element.
-  //   `
-
-  // audio4 = document.createElement("audio");
-  // audio4.innerHTML = `
-  //       <source src="assets/audio/bell4.mp3" type="audio/mpeg">
-  //       Your browser does not support the audio element.
-  //   `
-
-  // audio5 = document.createElement("audio");
-  // audio5.innerHTML = `
-  //       <source src="assets/audio/bell5.mp3" type="audio/mpeg">
-  //       Your browser does not support the audio element.
-  //   `
-
-  // audio6 = document.createElement("audio");
-  // audio6.innerHTML = `
-  //       <source src="assets/audio/bell6.mp3" type="audio/mpeg">
-  // Your browser does not support the audio element.
-  // `
-
-  // audio1 = new Audio('assets/audio/bell1.mp3');
-  // audio2 = new Audio('assets/audio/bell2.mp3');
-  // audio3 = new Audio('assets/audio/bell3.mp3');
-  // audio4 = new Audio('assets/audio/bell4.mp3');
-  // audio5 = new Audio('assets/audio/bell5.mp3');
-  // audio6 = new Audio('assets/audio/bell6.mp3');
-
-
-
-})
-
-button4.addEventListener("click", function () {
-  number = "4";
-  button1.remove();
-  button2.remove();
-  button3.remove();
-  button4.remove();
-  socket.emit("my-number", { number });
-  userStartAudio();
-
-
-
 })
 
 
