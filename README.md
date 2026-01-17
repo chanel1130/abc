@@ -2,6 +2,7 @@
 
 Hi, I am Chanel
 
-Find my project below:
-- abc-multi-touch: Net hunter
-- ...
+Find my main projects below:
+- the waterfall
+- the surveilled city
+- restroom graffit-e
