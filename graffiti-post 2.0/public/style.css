@@ -8,6 +8,7 @@ body {
   /* prevent from minimizing the browser */
   touch-action: none;
   font-family: "Gloria Hallelujah", cursive;
+
 }
 
 /* .gloria-hallelujah-regular {
@@ -221,4 +222,8 @@ canvas {
 
 .color-btn[data-color="#4da3ff"] {
   background: #4da3ff;
+}
+
+.pageBWrapper{
+  margin-left: 410px;
 }

@@ -1,9 +1,23 @@
 // const { scale } = require("framer-motion");
 
+
+
+
+
+
 if (location.hostname.toLowerCase().startsWith('browsercircus') || location.hostname.toLowerCase().startsWith('www')) {
   socket = io({ path: "/chanel/port-4200/socket.io" });  // yields '/leon/port-4100/socket.io' or '/socket.io'
 } else {
   socket = io();
+}
+
+let params = new URLSearchParams(document.location.search);
+let displayMode = params.get("display");
+if(displayMode == 1){
+  document.querySelector(".main-wrapper").classList.toggle("pageBWrapper")
+  
+  document.querySelector("#backBtn").style.display = "none"
+
 }
 
 
@@ -53,9 +67,17 @@ let allGraffiti = [];
 
 function setup() {
   // socket = io();
+  let canvasWidth = windowWidth;
+  if(displayMode == 1){
+    canvasWidth = 1000;
+  }
+  
+let canvasHeight = windowHeight;
 
-  let canvas = createCanvas(windowWidth, windowHeight);
+  let canvas = createCanvas(canvasWidth, canvasHeight);
   canvas.parent("p5-canvas-container");
+  canvas.style("display", "block");
+  canvas.style("margin", "o auto")
 
   document.getElementById("backBtn").addEventListener("click", confirmAndBack)
 
@@ -83,10 +105,10 @@ function setup() {
   //       loadImage(currentGraffiti.img, img => {
   //         myImg = img;
 
-  //         fitScale = 0.5 * min(windowWidth / img.width, windowHeight / img.height);
+  //         fitScale = 0.5 * min(canvasWidth / img.width, canvasHeight / img.height);
 
-  //         offsetX = windowWidth / 2 - (img.width * fitScale) / 2;
-  //         offsetY = windowHeight / 2 - (img.height * fitScale) / 2;
+  //         offsetX = canvasWidth / 2 - (img.width * fitScale) / 2;
+  //         offsetY = canvasHeight / 2 - (img.height * fitScale) / 2;
 
   //         console.log("Current graffiti loaded");
   //       });
@@ -111,9 +133,9 @@ function setup() {
         loadImage(d.imgURL, img => {
           myImg = img;
 
-          fitScale = 0.5 * min(windowWidth / img.width, windowHeight / img.height);
-          offsetX = windowWidth / 2;
-          offsetY = windowHeight / 2;
+          fitScale = 0.5 * min(canvasWidth / img.width, canvasHeight / img.height);
+          offsetX = canvasWidth / 2;
+          offsetY = canvasHeight / 2;
 
 
           console.log("Current graffiti loaded");
@@ -151,9 +173,9 @@ socket.on("new-drawing-from-server", function (d) {
   console.log("got single new drawing", d)
   d.img = loadImage(d.imgURL, img => {
 
-    d.scaleFactor = 0.5 * min(windowWidth / img.width, windowHeight / img.height);
-    d.x = windowWidth / 2;
-    d.y = windowHeight / 2;
+    d.scaleFactor = 0.5 * min(canvasWidth / img.width, canvasHeight / img.height);
+    d.x = canvasWidth / 2;
+    d.y = canvasHeight / 2;
     // d.x = 0;
     // d.y = 0;
 
@@ -206,9 +228,9 @@ function draw() {
   for (let g of allGraffiti) {
     if (g.scaleFactor == 1) {
       // continue
-      //   g.scaleFactor = 0.5 * min(windowWidth / g.img.width, windowHeight / g.img.height);
-      //   g.x = windowWidth / 2;
-      //   g.y = windowHeight / 2;
+      //   g.scaleFactor = 0.5 * min(canvasWidth / g.img.width, canvasHeight / g.img.height);
+      //   g.x = canvasWidth / 2;
+      //   g.y = canvasHeight / 2;
     }
     push();
     translate(g.x, g.y);
@@ -219,9 +241,9 @@ function draw() {
 
     let ageSec = (Date.now() - g.timestamp) / 1000;
     let opacity = 255;
-    if (ageSec > 60 && ageSec <= 120) {
+    if (ageSec > 600 && ageSec <= 1800) {
       opacity = 80;
-    } else if (ageSec > 120) {
+    } else if (ageSec > 1800) {
       opacity = 50;
     }
     tint(255, opacity);
